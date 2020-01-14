@@ -1,10 +1,12 @@
+import { NewMemberComponent } from './new-member/new-member.component';
 import { MembersDetailComponent } from './members-detail/members-detail.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 
 const routes: Routes = [
-  {path: 'member-detail/:id',component: MembersDetailComponent}
+  {path: 'member-detail/:id',component: MembersDetailComponent},
+  {path: 'new-member',component: NewMemberComponent}
 ];
 
 @NgModule({

@@ -1,5 +1,6 @@
+import { AppComponent } from './../app.component';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { ApiService } from '../api.service';
 
 @Component({
@@ -9,22 +10,58 @@ import { ApiService } from '../api.service';
 })
 export class MembersDetailComponent implements OnInit {
 
-  constructor(private route: ActivatedRoute, private api: ApiService) { }
-  selected_member = {name: '', surname : ''};
+  constructor(
+    private route: ActivatedRoute,
+    private api: ApiService,
+    private router: Router,
+    private appComponente: AppComponent) { }
+  selected_member = { name: '', surname: '' };
+  selected_id;
   ngOnInit() {
-    this.loadMember();
+    this.route.paramMap.subscribe((param: ParamMap) => {
+      let id = parseInt(param.get('id'));
+      this.selected_id = id;
+      this.loadMember(id);
+    });
   }
 
-  loadMember() {
-    const id = this.route.snapshot.paramMap.get('id');
-    console.log(id);
+  loadMember(id) {
     this.api.getMember(id).subscribe(
       data => {
-        console.log(data);
         this.selected_member = data;
       },
       error => {
-        console.log("Aconteceu um erro",error.message);
+        console.log("Aconteceu um erro", error.message);
+      }
+    );
+  }
+  update() {
+    this.api.updateMember(this.selected_member).subscribe(
+      data => {
+        this.selected_member = data;
+      },
+      error => {
+        console.log("Aconteceu um erro", error.message);
+      }
+    );
+  }
+  newMember() {
+    this.router.navigate(['new-member'])
+  };
+
+  delete() {
+    this.api.deleteMember(this.selected_id).subscribe(
+      data => {
+        let index;
+        this.appComponente.members.forEach((e,i) =>{
+          if(e.id == this.selected_id){
+            index = i;
+          }
+        });
+        this.appComponente.members.splice(index,1);
+      },
+      error => {
+        console.log("Aconteceu um erro", error.message);
       }
     );
   }
