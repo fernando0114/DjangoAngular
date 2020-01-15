@@ -1,6 +1,10 @@
 <h1>Detalhes dos membros:</h1>
 <P>Membro carregado: {{selected_member.name }} {{selected_member.surname }}</P>
 
+<span class="image left">
+    <img src="{{selected_member.photo}}" alt="Foto de: {{selected_member.name}}">
+</span>
+
 <input type="text" [(ngModel)]="selected_member.id" readonly> <br>
 <input type="text" [(ngModel)]="selected_member.name"> <br>
 <input type="text" [(ngModel)]="selected_member.surname"> <br>
